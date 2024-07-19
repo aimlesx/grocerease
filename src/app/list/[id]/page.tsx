@@ -3,7 +3,10 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Label } from '@/components/ui/label';
 import Topbar from './_components/topbar';
+
+import { cn } from '@/lib/utils';
 
 import { useDebounce } from '@uidotdev/usehooks';
 import {useEffect, useRef, useState} from 'react';
@@ -32,10 +35,19 @@ const Item = ({ item }: { item: ItemType }) => {
     };
 
     return (
-        <Button className='w-full' variant='ghost' key={item.id} onClick={onClick} asChild>
+        <Button
+            className={cn(
+                'justify-start w-full cursor-pointer bg-accent transition-opacity select-none',
+                checked && 'line-through opacity-40 bg-transparent hover:bg-transparent'
+            )}
+            variant='ghost'
+            key={item.id}
+            onClick={onClick}
+            asChild>
+
             <div>
-                <Checkbox className='mr-2' checked={checked} />
-                <p>{item.name}</p>
+                <Checkbox checked={checked} id={item.id.toString()} />
+                <Label className='ml-3 text-2xl pointer-events-none' htmlFor={item.id.toString()}>{item.name}</Label>
             </div>
         </Button>
     );
@@ -58,7 +70,7 @@ const List = () => {
         <>
             <Topbar listName={list?.name} setEdit={setEdit} />
             <ScrollArea>
-                <div className='flex flex-col gap-2 p-4'>
+                <div className='flex flex-col w-3/4 ml-auto mr-auto gap-4 p-4'>
                     {list && list.items.map((item) =>
                         <Item item={item} key={item.id} />
                     )}
